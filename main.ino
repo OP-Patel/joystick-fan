@@ -1,104 +1,101 @@
 #include <Stepper.h>
 
-// the number of steps per rotation for the stepper motor
-const int stepsPerRevolution = 2048;  
 
-// IN1-IN3-IN2-IN4, stepper class instance
+const int stepsPerRevolution = 2048; 
+
 Stepper myStepper(stepsPerRevolution, 8, 10, 9, 11);
 
-// oystick pins
+
 const int VRx = A0;
 const int VRy = A1;
-const int SW = 2;  // joystick button
+const int SW = 2;  
 
-// DC motor pins
+
 const int motorPin1 = 3;
 const int motorPin2 = 4;
-const int motorEnablePin = 5;  // PWM pin
+const int motorEnablePin = 5;  
 
-// (Red) LED pin for speed level indicator
+
 const int redLEDPin = 7;
 
-// DC motor speed levels --> levels go from 0-3. 
-int motorSpeedLevel = 1;  // start with an initial speed level of 1
-const int maxSpeedLevel = 3;  // maximum speed level
-const int speedIncrement = 85;  // speed increment for each level (255 / maxSpeedLevel)
+
+int motorSpeedLevel = 1;  
+const int maxSpeedLevel = 3; 
+const int speedIncrement = 85;  
 
 
-// track the mode (auto or manual) and state of the button
-bool autoMode = false;  // start in manual mode
-bool buttonPressed = false;  // track the state of the button
+bool autoMode = false;  // Start in manual mode
+bool buttonPressed = false;  
 
 void setup() {
-  // init serial port
+ 
   Serial.begin(9600);
   Serial.println("Setup complete");
 
-  // init the button pin as input with pull-up resistor
+  // Initialize the button pin as input with pull-up resistor
   pinMode(SW, INPUT_PULLUP);
-  myStepper.setSpeed(10);  // 10 RPM for stepper motor
 
-  // init DC motor pins
+  // Set initial speed of the stepper motor
+  myStepper.setSpeed(10);  // 10 RPM
+
+  // Initialize DC motor pins
   pinMode(motorPin1, OUTPUT);
   pinMode(motorPin2, OUTPUT);
   pinMode(motorEnablePin, OUTPUT);
 
-  // init LED pin
   pinMode(redLEDPin, OUTPUT);
-
-  // init set LED to off
   digitalWrite(redLEDPin, LOW);
 }
 
 void loop() {
-  // read joystick values
+  // Read joystick values
   int xPosition = analogRead(VRx);
   int yPosition = analogRead(VRy);
   bool currentButtonState = digitalRead(SW) == LOW;
 
-  // use joystick button on DP2 to check for mode changes
+  // Check for button press to toggle mode
   if (currentButtonState && !buttonPressed) {
-    autoMode = !autoMode;  // toggle modes
+    autoMode = !autoMode;  
     Serial.print("Mode changed to: ");
     Serial.println(autoMode ? "AUTO" : "MANUAL");
-    buttonPressed = true;  // no multiple toggling
+    buttonPressed = true; 
   } else if (!currentButtonState) {
     buttonPressed = false;
   }
 
-  // stepper controls based on AUTO/MANUAL mode
+  // Control stepper motor based on mode
   if (autoMode) {
     static bool direction = true;
     static unsigned long lastStepTime = 0;
     unsigned long currentTime = millis();
 
-    if (currentTime - lastStepTime >= 1000) {  // go opposite direction every 1s
+    if (currentTime - lastStepTime >= 250) {  // Change direction every 250ms
       lastStepTime = currentTime;
       direction = !direction;
     }
 
     if (direction) {
       Serial.println("Stepping clockwise in auto mode");
-      myStepper.step(stepsPerRevolution / 2);  // step clockwise for half a revolution
+      myStepper.step(stepsPerRevolution / 7);  // Step clockwise for 1/5 a revolution
     } else {
       Serial.println("Stepping counterclockwise in auto mode");
-      myStepper.step(-stepsPerRevolution / 2);  // step counterclockwise for half a revolution
+      myStepper.step(-stepsPerRevolution / 7);  // Step counterclockwise for 1/5 a revolution
     }
   } else {
-    // adjust stepper motor based on vertical joystick position (Y axis)
+    // Control stepper motor based on vertical joystick position (Y axis)
     if (yPosition < 300) {
       Serial.println("Stepping counterclockwise...");
       myStepper.step(stepsPerRevolution / 10);  
     } else if (yPosition > 700) {
       Serial.println("Stepping clockwise...");
-      myStepper.step(-stepsPerRevolution / 10);  
+      myStepper.step(-stepsPerRevolution / 10);  /
     } else {
       Serial.println("Stopping stepper motor...");
-      // motor stops naturally if no input on manual mode
+      // No steps taken, the motor stops naturally
     }
   }
 
-  // adjust DC motor speed based on horizontal joystick position (X axis)
+  // Adjust DC motor speed based on horizontal joystick position (X axis)
   if (xPosition < 300) {
     if (motorSpeedLevel < maxSpeedLevel) {
       motorSpeedLevel++;
@@ -107,7 +104,7 @@ void loop() {
     } else {
       Serial.println("Already at maximum speed level!");
     }
-    delay(300);  // debounce 
+    delay(300);  // Debounce 
   } else if (xPosition > 700) {
     if (motorSpeedLevel > 0) {
       motorSpeedLevel--;
@@ -116,21 +113,20 @@ void loop() {
     } else {
       Serial.println("Already at minimum speed level!");
     }
-    delay(300);  // debounce
+    delay(300);  // Debounce 
   }
 
-  // adjust speed of dc motor based on speed level
+  // Set the speed of the DC motor based on the speed level
   int motorSpeed = motorSpeedLevel * speedIncrement;
   analogWrite(motorEnablePin, motorSpeed);
 
-  // LED indicator for lowest speed level (0- off)
+  // Update LED indicator 
   if (motorSpeedLevel == 0) {
     digitalWrite(redLEDPin, HIGH);
   } else {
     digitalWrite(redLEDPin, LOW);
   }
 
-  // determine the direction for fan motor
   if (motorSpeed > 0) {
     digitalWrite(motorPin1, HIGH);
     digitalWrite(motorPin2, LOW);
@@ -139,6 +135,6 @@ void loop() {
     digitalWrite(motorPin2, LOW);
   }
 
-  delay(5);  // delay
+  delay(5); 
 }
 
