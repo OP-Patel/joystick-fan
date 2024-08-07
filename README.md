@@ -12,7 +12,7 @@ All external parts that are used are provided with their appropirate part number
 - ULN2003/X113647 Stepper Motor Driver (1597-1699-ND)
 - Breadboard Power Supply Module (377-2647-ND)
 
-## Schematic
+## Connection Schematic
 ![schematic-joystickfan](https://github.com/user-attachments/assets/6b394b59-8135-4fd5-b1d7-b04940891dd0)
 
 Made on Scheme-it (Digikey's Schematic Tool). An external link to the schematic can be found [here](https://www.digikey.ca/schemeit/project/joystick-b921c0219b6d4c529892d8f982140288). 
