@@ -20,7 +20,7 @@ Made on Scheme-it (Digikey's Schematic Tool). An external link to the schematic 
 ## Schematic Rev2 (KiCad)
 ![image](https://github.com/user-attachments/assets/d4a5b6f6-f8ec-41bf-b6ec-4e239f14f40a)
 
-A full file of all relevant attachments is provided under "KiCad Documents" within the repository. 
+All KiCad files are provided under the "joystick-fan" directory within the repository. 
 
 ## Connections
 Power supply module should be attached to the breadboard, do not power the motors using the Arduino board.
