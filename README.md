@@ -44,8 +44,15 @@ Attach the Stepper Motor Coil to the Stepper Motor Driver. View aforementioned s
 - 2A (In 2) - > D3 PWM
 - VCC2 (Motor) -> 5V
 
-## Demo Video
-
 ### LED to Arduino UNO
 - Anode (long leg) -> 220Ω Resistor -> D7 (Power from Arduino) 
 - Cathode (short leg) -> GND
+
+## Demo Video
+[![Joystick-Fan Demo Video](https://img.youtube.com/vi/cgZLRQtYCaY/0.jpg)](https://www.youtube.com/watch?v=cgZLRQtYCaY)
+
+A physical link is provided [here](https://youtu.be/cgZLRQtYCaY)
+
+## Next Steps
+- Creating a proper 3D printed design for housing the motors and fan
+- PCB Design using KiCAD
