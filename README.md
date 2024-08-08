@@ -12,10 +12,15 @@ All external parts that are used are provided with their appropirate part number
 - ULN2003/X113647 Stepper Motor Driver (1597-1699-ND)
 - Breadboard Power Supply Module (377-2647-ND)
 
-## Connection Schematic
+## Schematic Rev1 (Scheme-It)
 ![schematic-joystickfan](https://github.com/user-attachments/assets/6b394b59-8135-4fd5-b1d7-b04940891dd0)
 
 Made on Scheme-it (Digikey's Schematic Tool). An external link to the schematic can be found [here](https://www.digikey.ca/schemeit/project/joystick-b921c0219b6d4c529892d8f982140288). 
+
+## Schematic Rev2 (KiCad)
+![image](https://github.com/user-attachments/assets/d4a5b6f6-f8ec-41bf-b6ec-4e239f14f40a)
+
+A full file of all relevant attachments is provided under "KiCad Documents" within the repository. 
 
 ## Connections
 Power supply module should be attached to the breadboard, do not power the motors using the Arduino board.
